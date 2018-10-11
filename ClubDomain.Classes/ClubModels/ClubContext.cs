@@ -14,6 +14,7 @@ namespace Clubs.Model
         public DbSet<ClubEvent> ClubEvents { get; set; }
         public DbSet<Member> ClubMembers { get; set; }
         public DbSet<EventAttendnace> EventAttendances { get; set; }
+        public DbSet<Programme> Programmes { get; set; }
         public ClubContext():base("ClubsConnection")
         {
             
