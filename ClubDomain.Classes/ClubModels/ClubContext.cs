@@ -15,7 +15,10 @@ namespace Clubs.Model
         public DbSet<Member> ClubMembers { get; set; }
         public DbSet<EventAttendnace> EventAttendances { get; set; }
         public DbSet<Programme> Programmes { get; set; }
-        public ClubContext():base("ClubsConnection")
+        public DbSet<Student> Students { get; set; }
+
+
+        public ClubContext():base(nameOrConnectionString: "ClubsConnection")
         {
             
         }

@@ -56,11 +56,17 @@
     <Compile Include="ClubModels\EventAttendnace.cs" />
     <Compile Include="ClubModels\Member.cs" />
     <Compile Include="ClubModels\Programme.cs" />
+    <Compile Include="ClubModels\Student.cs" />
     <Compile Include="Migrations\201810092202236_Initial Club Context.cs" />
     <Compile Include="Migrations\201810092202236_Initial Club Context.Designer.cs">
       <DependentUpon>201810092202236_Initial Club Context.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810152134514_student programme.cs" />
+    <Compile Include="Migrations\201810152134514_student programme.Designer.cs">
+      <DependentUpon>201810152134514_student programme.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ProgrammeData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,7 +74,11 @@
     <EmbeddedResource Include="Courses.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Migrations\201810152134514_student programme.resx">
+      <DependentUpon>201810152134514_student programme.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StudentList1.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

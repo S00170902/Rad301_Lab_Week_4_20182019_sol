@@ -34,6 +34,24 @@ namespace Week4.Console
                         System.Console.ReadKey();
                     }
                 }
+
+            List<Student> students = new List<Student>();
+            resourceName = "Week4.Console.StudentList1.csv";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    CsvReader csvReader = new CsvReader(reader);
+                    csvReader.Configuration.HasHeaderRecord = false;
+                    students = csvReader.GetRecords<Student>().ToList();
+                    foreach (var item in students)
+                    {
+                        System.Console.WriteLine("{0}", item.ToString());
+                    }
+                    System.Console.ReadKey();
+                }
+            }
+
         }
     }
 }
