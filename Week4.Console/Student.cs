@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClubDomain.Classes.ClubModels
+namespace Week4.Console
 {
     public class Student
     {
