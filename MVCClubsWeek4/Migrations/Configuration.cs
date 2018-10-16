@@ -1,5 +1,7 @@
 namespace MVCClubsWeek4.Migrations
 {
+    using ClubDomain.Classes.ClubModels;
+    using Clubs.Model;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using MVCClubsWeek4.Models;
@@ -69,6 +71,48 @@ namespace MVCClubsWeek4.Migrations
             {
                 manager.AddToRoles(admin.Id, new string[] { "Admin", "member", "ClubAdmin" });
             }
+            SeedClubAdmin(manager,context);
+        }
+
+        private void SeedClubAdmin(UserManager<ApplicationUser> manager, ApplicationDbContext context)
+        {
+            PasswordHasher ps = new PasswordHasher();
+            Member chosenMember;
+            // Create a club member Application user login
+            ClubContext clubc = new ClubContext();
+            chosenMember = clubc.Clubs.First().clubMembers.FirstOrDefault();
+
+                    if (chosenMember == null)
+                    {
+                        throw new Exception("No Club Member available");
+                    }
+                    else chosenMember.myClub.adminID = chosenMember.MemberID;
+
+                // Add the membership and role for this member
+                if (chosenMember != null)
+                {
+                    context.Users.AddOrUpdate(u => u.UserName,
+                        new ApplicationUser
+                        {
+                            ClubEntityID = chosenMember.StudentID,
+                            FirstName = chosenMember.studentMember.FirstName,
+                            Surname = chosenMember.studentMember.SecondName,
+                            Email = chosenMember.StudentID + "@mail.itsligo.ie",
+                            UserName = chosenMember.StudentID + "@mail.itsligo.ie",
+                            EmailConfirmed = true,
+                            JoinDate = DateTime.Now,
+                            SecurityStamp = Guid.NewGuid().ToString(),
+                            PasswordHash = ps.HashPassword(chosenMember.StudentID + "s$1")
+                        });
+                }
+                context.SaveChanges();
+                ApplicationUser ChosenClubAdmin = manager.FindByEmail(chosenMember.StudentID + "@mail.itsligo.ie");
+                if (ChosenClubAdmin != null)
+                {
+                    manager.AddToRoles(ChosenClubAdmin.Id, new string[] { "ClubAdmin" });
+                }
+
+            
         }
     }
 }

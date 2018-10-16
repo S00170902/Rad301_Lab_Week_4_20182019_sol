@@ -27,8 +27,8 @@ namespace ClubDomain.Classes.Migrations
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
             seed_db_programmes(context);
-            //seed_Db_students(context);
-            //seed_Db_model(context);
+            seed_Db_students(context);
+            seed_Db_model(context);
 
         }
 

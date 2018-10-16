@@ -200,6 +200,10 @@
     <Compile Include="Migrations\201810092307272_Application DB Context Setup.Designer.cs">
       <DependentUpon>201810092307272_Application DB Context Setup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810162143333_Club Entity Added.cs" />
+    <Compile Include="Migrations\201810162143333_Club Entity Added.Designer.cs">
+      <DependentUpon>201810162143333_Club Entity Added.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -289,6 +293,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201810092307272_Application DB Context Setup.resx">
       <DependentUpon>201810092307272_Application DB Context Setup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810162143333_Club Entity Added.resx">
+      <DependentUpon>201810162143333_Club Entity Added.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

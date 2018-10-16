@@ -13,6 +13,7 @@ namespace MVCClubsWeek4.Models
         public DateTime JoinDate { get; set; }
         public string FirstName { get; set; }
         public string Surname { get; set; }
+        public string ClubEntityID { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
