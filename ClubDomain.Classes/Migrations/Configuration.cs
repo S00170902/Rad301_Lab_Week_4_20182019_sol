@@ -136,7 +136,7 @@ namespace ClubDomain.Classes.Migrations
                     },
                     new ClubEvent { Location= "It Sligo", Venue="Astro Pitch",
                         StartDateTime =DateTime.ParseExact("05/11/2018 18:00:00","dd/MM/yyyy HH:mm:ss",cultureinfo),
-                        EndDateTime = DateTime.ParseExact("05/11/2018 18:00:00","dd/MM/yyyy HH:mm:ss",cultureinfo),
+                        EndDateTime = DateTime.ParseExact("05/11/2018 20:00:00","dd/MM/yyyy HH:mm:ss",cultureinfo),
                     }
                 }
                 }, // End of Club
