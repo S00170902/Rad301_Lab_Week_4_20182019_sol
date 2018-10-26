@@ -11,7 +11,7 @@ using Clubs.Model;
 
 namespace MVCClubsWeek4.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "ClubAdmin")]
     public class ClubsController : Controller
     {
         private ClubContext db = new ClubContext();
