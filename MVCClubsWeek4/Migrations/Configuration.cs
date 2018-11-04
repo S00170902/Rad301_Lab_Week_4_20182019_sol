@@ -81,15 +81,15 @@ namespace MVCClubsWeek4.Migrations
             // Create a club member Application user login
             ClubContext clubc = new ClubContext();
             chosenMember = clubc.Clubs.First().clubMembers.FirstOrDefault();
-
+            
                     if (chosenMember == null)
                     {
                         throw new Exception("No Club Member available");
                     }
                     else chosenMember.myClub.adminID = chosenMember.MemberID;
-
-                // Add the membership and role for this member
-                if (chosenMember != null)
+            clubc.SaveChanges();
+            // Add the membership and role for this member
+            if (chosenMember != null)
                 {
                     context.Users.AddOrUpdate(u => u.UserName,
                         new ApplicationUser
