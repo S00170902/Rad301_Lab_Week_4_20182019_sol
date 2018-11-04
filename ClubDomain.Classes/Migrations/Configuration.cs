@@ -81,13 +81,13 @@ namespace ClubDomain.Classes.Migrations
             CultureInfo cultureinfo = CultureInfo.CreateSpecificCulture("en-IE");
             DateTime baseDate = DateTime.ParseExact("01/01/2012", "dd/mm/yyyy", cultureinfo);
             Random r = new Random();
-            context.Clubs.AddOrUpdate(new Club[]
+            context.Clubs.AddOrUpdate(c => c.ClubName, new Club[]
             {
                 new Club{ ClubName="The Chess Club", CreationDate = DateTime.ParseExact("25/01/2017","dd/mm/yyyy",cultureinfo),
-                clubMembers = new List<Member>
+                clubMembers = new List<Member>()
                 {
-                    new Member{ StudentID="S00698845", approved = true},
-                    new Member{ StudentID="S00274643", approved = true}
+                    //new Member{ StudentID="S00698845", approved = true},
+                    //new Member{ StudentID="S00274643", approved = true}
                 },
                 clubEvents = new List<ClubEvent>
                 {
@@ -103,10 +103,10 @@ namespace ClubDomain.Classes.Migrations
                 }
                 },
                 new Club{ ClubName = "Volley Ball Club", CreationDate = DateTime.ParseExact("01/02/2018","dd/mm/yyyy",cultureinfo),
-                         clubMembers = new List<Member>
+                clubMembers = new List<Member>
                             {
-                                new Member{ StudentID="S00472973", approved = true},
-                                new Member{ StudentID="S00806042", approved = true}
+                                //new Member{ StudentID="S00472973", approved = true},
+                                //new Member{ StudentID="S00806042", approved = true}
                             },
                 clubEvents = new List<ClubEvent>
                 {
@@ -125,8 +125,8 @@ namespace ClubDomain.Classes.Migrations
                 new Club { ClubName = "Soccer Club", CreationDate = DateTime.ParseExact("07/09/2018", "dd/mm/yyyy",cultureinfo),
                                 clubMembers = new List<Member>
                 {
-                    new Member{ StudentID="S00389325", approved = true},
-                    new Member{ StudentID="S00472973", approved = true}
+                    //new Member{ StudentID="S00389325", approved = true},
+                    //new Member{ StudentID="S00472973", approved = true}
                 }, // End Club members
                 clubEvents = new List<ClubEvent>
                 {
@@ -143,7 +143,13 @@ namespace ClubDomain.Classes.Migrations
             } // End of Clubs
             );
             context.SaveChanges();
+            SeedRandomMembers(context);
+            SeedMembersEvents(context);
+        }
 
+        private void SeedMembersEvents(ClubContext context)
+        {
+            
             var memberEvents = (from club in context.Clubs
                                 join member in context.ClubMembers
                                 on club.ClubId equals member.AssociatedClub
@@ -157,22 +163,43 @@ namespace ClubDomain.Classes.Migrations
                            EventAttendnace
                 { AttendeeMember = item.AttendeeMember, EventID = item.EventID });
             }
-            //List<ClubEvent> ClubEvents = context.ClubEvents.ToList();
-            //List<Member> Members = context.ClubMembers.ToList();
-            //List<EventAttendnace> attendances = new List<EventAttendnace>();
+            context.SaveChanges();
 
-            //foreach (var member in Members)
-            //{
-            //        foreach (var clubEvent in member.myClub.clubEvents)
-            //        {
-            //                context.EventAttendances.AddOrUpdate(
-            //                    new EventAttendnace
-            //                {
-            //                    associatedEvent = clubEvent,
-            //                    memberAttending = member
-            //                });
-            //        }
-            //}
+        }
+
+        private void SeedRandomMembers(ClubContext context)
+        {
+            // Select a Random set of IDs
+            List<string> RandomSIDs = context.Students.Select(
+                s => new { s.StudentID, gid = Guid.NewGuid() }).OrderBy(g => g.gid)
+                .Select(s => s.StudentID).ToList();
+            // Select the random students
+            List<Student> sublist = context.Students.Where(s => RandomSIDs.Contains(s.StudentID)).Take(9).ToList();
+            int c = 1;
+            List<int> ClubIds = context.Clubs.Select(club => club.ClubId).ToList();
+            int Current = 0;
+            // using a list of clubsIDs and a modulus operator to 
+            // Add 3 students to each club
+                foreach (var item in sublist)
+                {
+                context.ClubMembers.AddOrUpdate(m => new { m.StudentID, m.AssociatedClub },
+                    new Member
+                    {
+                        AssociatedClub = ClubIds[Current],
+                        StudentID = item.StudentID,
+                        approved = true
+                    });
+                // Change club every 3 members
+                if ((c % 3) == 0)
+                {
+                    if(Current < ClubIds.Count() - 1)
+                        Current++;
+                }
+                // add students as mambers to the current club
+                // in the club members collection making sure students are not repeated
+                // for membership
+                c++;
+            }
             context.SaveChanges();
         }
     }

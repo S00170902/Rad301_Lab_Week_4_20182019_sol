@@ -51,7 +51,21 @@ namespace Week4.Console
                     System.Console.ReadKey();
                 }
             }
+            // Test Random Selection of students
+            List<string> RandomSIDs = students.Select(
+                s => new { s.StudentID, gid = Guid.NewGuid() }).OrderBy(g =>g.gid)
+                .Select(s => s.StudentID).ToList();
 
+            List<Student> sublist = students.Where(s => RandomSIDs.Contains(s.StudentID)).Take(9).ToList();
+            int c = 0;
+            foreach (var item in sublist)
+            {
+                if ((c % 3) == 0)
+                    System.Console.WriteLine("Change Club at {0}",c);
+                System.Console.WriteLine("Random Student {0}", item.ToString());
+                c++;
+            }
+            System.Console.ReadKey();
         }
     }
 }
