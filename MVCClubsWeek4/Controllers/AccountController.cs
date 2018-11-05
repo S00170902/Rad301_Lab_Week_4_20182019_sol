@@ -5,6 +5,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using ClubDomain.Classes.ClubModels;
+using Clubs.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -149,10 +151,26 @@ namespace MVCClubsWeek4.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            
+            // Add in check fro Validity of Student ID
+            if (ModelState.IsValid && Valid(model.ClubEntityID))
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                // If the model is valid and the student ID is valid
+                // Get the rest of the sturent details and create a login for the current student
+                Student ValidStudent = GetStudent(model.ClubEntityID);
+
+                var user = new ApplicationUser {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    JoinDate = DateTime.Now,
+                    EmailConfirmed = true,              // As not implemnting two phase authentication
+                    FirstName = ValidStudent.FirstName,
+                    Surname = ValidStudent.SecondName,
+                    ClubEntityID = model.ClubEntityID };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
+                
+                    
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
@@ -167,9 +185,35 @@ namespace MVCClubsWeek4.Controllers
                 }
                 AddErrors(result);
             }
-
+            if(!Valid(model.ClubEntityID))
+            {
+                ViewBag.Errors = "Student ID does not exist";
+            }
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        private Student GetStudent(string clubEntityID)
+        {
+            using (ClubContext ctx = new ClubContext())
+            {
+                Student student;
+                if ((student = ctx.Students.FirstOrDefault(s => s.StudentID == clubEntityID)) != null)
+                    return student;
+            }
+            return null;
+
+        }
+
+        private bool Valid(string clubEntityID)
+        {
+            using (ClubContext ctx = new ClubContext())
+            {
+                if (ctx.Students.FirstOrDefault(s => s.StudentID == clubEntityID) != null)
+                    return true;
+            }
+            return false;
+
         }
 
         //

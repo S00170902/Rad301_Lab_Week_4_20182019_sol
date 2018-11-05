@@ -1,4 +1,19 @@
 ﻿@using Microsoft.AspNet.Identity
+@using MVCClubsWeek4.Models
+
+@if(Request.IsAuthenticated)
+{
+    // Retrieving deatails of a the vaidate Logged in user to be presented instead of the deafult Identity details
+    using (ApplicationDbContext db = new ApplicationDbContext())
+    {
+        ApplicationUser user = db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+        if(user != null)
+        {
+            //Use the ViewBag dictionary for convience
+            ViewBag.FullName = user.FirstName + " " + user.Surname;
+        }
+    }
+}
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -6,13 +21,16 @@
     @Html.AntiForgeryToken()
 
 <ul class="nav navbar-nav navbar-right">
-    @if (User.IsInRole("ClubAdmin"))
+    @if (User.IsInRole("ClubAdmin") || User.IsInRole("Admin"))
     {
         <li>@Html.ActionLink("Clubs", "Index", "Clubs")</li>
     }
 
     <li>
         @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+    </li>
+    <li>
+        @Html.ActionLink("Logged in as " + (string)@ViewBag.FullName, "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
     </li>
     <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
 </ul>

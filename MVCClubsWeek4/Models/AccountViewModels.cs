@@ -75,10 +75,16 @@ namespace MVCClubsWeek4.Models
         [Display(Name = "Password")]
         public string Password { get; set; }
 
+        
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Student ID")]
+        [RegularExpression(@"^[S|s]\d{8}$", ErrorMessage = "Student ID must start with an S and have 9 Characters in Total")]
+        public string ClubEntityID { get; set; }
     }
 
     public class ResetPasswordViewModel
