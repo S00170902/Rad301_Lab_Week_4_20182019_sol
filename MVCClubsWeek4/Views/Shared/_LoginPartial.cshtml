@@ -21,7 +21,7 @@
     @Html.AntiForgeryToken()
 
 <ul class="nav navbar-nav navbar-right">
-    @if (User.IsInRole("ClubAdmin") || User.IsInRole("Admin"))
+    @if (User.IsInRole("Admin"))
     {
         <li>@Html.ActionLink("Clubs", "Index", "Clubs")</li>
     }
