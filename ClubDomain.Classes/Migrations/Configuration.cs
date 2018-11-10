@@ -182,6 +182,9 @@ namespace ClubDomain.Classes.Migrations
             // Add 3 students to each club
                 foreach (var item in sublist)
                 {
+                // add students as members to the current club
+                // in the club members collection making sure students are not repeated
+                // for membership
                 context.ClubMembers.AddOrUpdate(m => new { m.StudentID, m.AssociatedClub },
                     new Member
                     {
@@ -195,9 +198,7 @@ namespace ClubDomain.Classes.Migrations
                     if(Current < ClubIds.Count() - 1)
                         Current++;
                 }
-                // add students as mambers to the current club
-                // in the club members collection making sure students are not repeated
-                // for membership
+                
                 c++;
             }
             context.SaveChanges();
