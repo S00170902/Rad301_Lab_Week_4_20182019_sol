@@ -35,7 +35,7 @@ namespace MVCClubsWeek4.Migrations
                 new IdentityRole { Name = "ClubAdmin" }
                 );
             context.Roles.AddOrUpdate(r => r.Name,
-                new IdentityRole { Name = "member" }
+                new IdentityRole { Name = "Member" }
                 );
 
             PasswordHasher ps = new PasswordHasher();
@@ -70,10 +70,12 @@ namespace MVCClubsWeek4.Migrations
             ApplicationUser admin = manager.FindByEmail("powell.paul@itsligo.ie");
             if (admin != null)
             {
-                manager.AddToRoles(admin.Id, new string[] { "Admin", "member", "ClubAdmin" });
+                manager.AddToRoles(admin.Id, new string[] { "Admin", "Member", "ClubAdmin" });
             }
             //SeedClubAdmin(manager,context);
             SeedAllClubAdmin(manager, context);
+            // Added for Part 19 of Lab sheet week 5 to simulate joined but not approved
+            SeedClubMembersApplicationUsers(manager, context); 
         }
         // Seeding admins for all clubs
         private void SeedAllClubAdmin(UserManager<ApplicationUser> manager, ApplicationDbContext context)
@@ -126,7 +128,36 @@ namespace MVCClubsWeek4.Migrations
 
         }
 
+        private void SeedClubMembersApplicationUsers(UserManager<ApplicationUser> manager, ApplicationDbContext context)
+        {
+            List<Member> members;
+            // Create Application Logins for all seeded members 
+            ClubContext clubc = new ClubContext();
 
+            members = clubc.ClubMembers.ToList();
+
+            PasswordHasher ps = new PasswordHasher();
+            foreach (var member in members)
+            {
+                ApplicationUser user = manager.FindByEmail(member.StudentID + "@mail.itsligo.ie");
+                if(user == null)
+                {
+                    context.Users.AddOrUpdate(u => u.UserName,
+                        new ApplicationUser
+                        {
+                            ClubEntityID = member.StudentID,
+                            FirstName = member.studentMember.FirstName,
+                            Surname = member.studentMember.SecondName,
+                            Email = member.StudentID + "@mail.itsligo.ie",
+                            UserName = member.StudentID + "@mail.itsligo.ie",
+                            EmailConfirmed = true,
+                            JoinDate = DateTime.Now,
+                            SecurityStamp = Guid.NewGuid().ToString(),
+                            PasswordHash = ps.HashPassword(member.StudentID + "s$1")
+                        });
+                }
+            }
+        }
 
         // Only doing One club here as requested in teh Lab sheet
         // But to do all clubs and choose a club admin for each
@@ -138,12 +169,16 @@ namespace MVCClubsWeek4.Migrations
             // Create a club member Application user login
             ClubContext clubc = new ClubContext();
             chosenMember = clubc.Clubs.First().clubMembers.FirstOrDefault();
-            
-                    if (chosenMember == null)
-                    {
-                        throw new Exception("No Club Member available");
-                    }
-                    else chosenMember.myClub.adminID = chosenMember.MemberID;
+
+            if (chosenMember == null)
+            {
+                throw new Exception("No Club Member available");
+            }
+            else
+            {
+                chosenMember.approved = true;
+                chosenMember.myClub.adminID = chosenMember.MemberID;
+            }
             clubc.SaveChanges();
             // Add the membership and role for this member
             if (chosenMember != null)

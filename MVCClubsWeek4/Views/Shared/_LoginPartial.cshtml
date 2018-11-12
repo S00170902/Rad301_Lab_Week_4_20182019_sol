@@ -21,14 +21,20 @@
     @Html.AntiForgeryToken()
 
 <ul class="nav navbar-nav navbar-right">
+
     @if (User.IsInRole("Admin"))
     {
         <li>@Html.ActionLink("Clubs", "Index", "Clubs")</li>
+        @Html.ActionLink("Logged in as " + (string)@ViewBag.FullName, "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+    }
+    @if (User.IsInRole("ClubAdmin"))
+    {
+        @Html.ActionLink("Maintain My Club ", "Index", "ClubAdmin", routeValues: null, htmlAttributes: new { title = "Manage My Club" })
     }
 
-    <li>
-        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-    </li>
+    @*<li>
+            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+        </li>*@
     <li>
         @Html.ActionLink("Logged in as " + (string)@ViewBag.FullName, "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
     </li>

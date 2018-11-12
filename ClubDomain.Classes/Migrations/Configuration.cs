@@ -190,7 +190,8 @@ namespace ClubDomain.Classes.Migrations
                     {
                         AssociatedClub = ClubIds[Current],
                         StudentID = item.StudentID,
-                        approved = true
+                        // Adjusted for Part 19 of Lab sheet week 5 to simulate joined but not approved
+                        approved = false
                     });
                 // Change club every 3 members
                 if ((c % 3) == 0)
@@ -203,5 +204,7 @@ namespace ClubDomain.Classes.Migrations
             }
             context.SaveChanges();
         }
+
+        
     }
 }

@@ -68,7 +68,7 @@ namespace MVCClubsWeek4.Controllers
         [Authorize(Users = "powell.paul@itsligo.ie")]
         public ActionResult Create(
             [Bind(Include = "ClubName,CreationDate,StudentID")]
-                ClubCreateView clubView)
+                ClubViewModel clubView)
         {
             if (ModelState.IsValid)
             {
@@ -123,7 +123,7 @@ namespace MVCClubsWeek4.Controllers
                     SecurityStamp = Guid.NewGuid().ToString(),
                     FirstName = member.studentMember.FirstName,
                     Surname = member.studentMember.SecondName,
-                    PasswordHash = ps.HashPassword(member.studentMember.SecondName + "$1")
+                    PasswordHash = ps.HashPassword(member.StudentID + "s$1")
                 };
                 appCtx.Users.Add(user);
                 appCtx.SaveChanges(); // Again updates the key field }

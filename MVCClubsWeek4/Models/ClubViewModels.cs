@@ -7,7 +7,7 @@ using System.Web;
 
 namespace MVCClubsWeek4.Models
 {
-    public class ClubCreateView
+    public class ClubViewModel
     {
         [Display(Name = "Club Name")]
         public string ClubName { get; set; }
@@ -19,5 +19,22 @@ namespace MVCClubsWeek4.Models
             ErrorMessage = "Student ID must start with an S and have 9 Characters in Total")]
         public string StudentID { get; set; }
         
+    }
+
+    public class ClubAssignMemberViewModel
+    {
+
+        [Display(Name = "Club Name")]
+        public string ClubName { get; set; }
+
+
+        [Display(Name = "Number of Current Assigned members")]
+        public int NoOfMembers { get; set; }
+
+        [Display(Name = "Assign All?")]
+        public bool AssignAll { get; set; }
+
+        public int AssignedMember { get; set; }
+
     }
 }
